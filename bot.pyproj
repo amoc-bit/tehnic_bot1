@@ -32,11 +32,26 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="app\forms.py" />
+    <Compile Include="app\management\command\set_webhook.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="app\management\command\__init__.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="app\management\__init__.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="app\models.py" />
     <Compile Include="app\tests.py" />
     <Compile Include="app\views.py" />
     <Compile Include="app\__init__.py" />
     <Compile Include="app\migrations\__init__.py" />
+    <Compile Include="bot\views.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="bot\webhook_handler.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="manage.py" />
     <Compile Include="bot\__init__.py" />
     <Compile Include="bot\settings.py" />
@@ -45,7 +60,9 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="app\" />
+    <Folder Include="app\management\command\" />
     <Folder Include="app\migrations\" />
+    <Folder Include="app\management\" />
     <Folder Include="app\static\" />
     <Folder Include="app\static\app\" />
     <Folder Include="app\static\app\content\" />
@@ -57,6 +74,9 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="app\drawio1.txt" />
+    <Content Include="bot\Документация_текст.txt" />
+    <Content Include="bot\Изменения.txt" />
+    <Content Include="bot\Структура проекта.txt" />
     <Content Include="requirements.txt" />
     <Content Include="db.sqlite3" />
     <Content Include="app\static\app\content\bootstrap.css" />

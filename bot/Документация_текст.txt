@@ -1,0 +1,209 @@
+Возможно, пользователь хочет, чтобы документация была понятной для разработчиков разного уровня, поэтому стоит использовать четкие разделы и подзаголовки, примеры кода и конфигурационных файлов, а также пояснять ключевые решения архитектуры.
+
+Важно не забыть упомянуть зависимости проекта и как их установить, а также привести примеры команд для запуска и управления приложением. Также стоит включить раздел с возможными ошибками и способами их устранения.
+
+Теперь нужно структурировать все это в логическом порядке, начиная с общего описания, затем установка и настройка, архитектура, компоненты, API, примеры использования, обработка ошибок и рекомендации. Убедиться, что каждый раздел понятен и покрывает все аспекты проекта.
+
+Техническая документация: Система управления лизинговыми данными с Telegram-ботом
+1. Введение
+Система предназначена для автоматического обновления лизинговых данных из XLSX-файла и предоставления доступа к данным через Telegram-бота. Основные функции:
+
+Ежедневное обновление данных из внешнего источника
+
+Хранение данных в MySQL
+
+Управление через Telegram-бота
+
+REST API для интеграций
+
+2. Архитектура системы
+2.1. Компоненты системы
+Architecture Diagram
+
+Внешний источник данных: XLSX-файл по HTTP
+
+Django-приложение: Обработка данных и бизнес-логика
+
+MySQL Database: Хранение лизинговых данных
+
+Telegram Bot: Пользовательский интерфейс
+
+Webhook Handler: Обработчик запросов от Telegram
+
+2.2. Технологический стек
+Backend: Django 4.x
+
+Database: MySQL 8.x
+
+Bot Framework: python-telegram-bot 20.x
+
+Data Processing: Pandas 2.x, Openpyxl 3.x
+
+HTTP Client: Requests 2.x
+
+3. Установка и настройка
+3.1. Требования
+Python 3.10+
+
+MySQL Server 8+
+
+Сертификат SSL (для продакшена)
+
+3.2. Конфигурация окружения
+bash
+Copy
+# Установка зависимостей
+pip install -r requirements.txt
+
+# Файл .env
+TELEGRAM_BOT_TOKEN=your_bot_token
+DATABASE_URL=mysql://user:password@host/dbname
+WEBHOOK_URL=https://your-domain.com/bot/webhook/
+3.3. Миграции базы данных
+bash
+Copy
+python manage.py makemigrations
+python manage.py migrate
+4. Детали реализации
+4.1. Модель данных
+python
+Copy
+class LeasingRecord(models.Model):
+    contract_number = models.CharField(max_length=100, unique=True)
+    client_name = models.CharField(max_length=255)
+    amount = models.DecimalField(max_digits=15, decimal_places=2)
+    start_date = models.DateField()
+    end_date = models.DateField()
+    status = models.CharField(max_length=50)
+4.2. Команда обновления данных
+Команда: python manage.py update_data
+
+Алгоритм работы:
+
+Загрузка XLSX-файла по HTTP
+
+Парсинг данных с помощью Pandas
+
+Преобразование структуры данных
+
+Пакетное обновление записей в БД
+
+mermaid
+Copy
+sequenceDiagram
+    participant User
+    participant Bot
+    participant Django
+    participant DB
+
+    User->>Bot: /update
+    Bot->>Django: call_command('update_data')
+    Django->>External: GET XLSX
+    External->>Django: XLSX Response
+    Django->>Django: Parse Data
+    Django->>DB: Bulk Update
+    DB->>Django: Update Result
+    Django->>Bot: Success/Fail
+    Bot->>User: Result
+4.3. Telegram Bot API
+Доступные команды:
+Команда	Описание	Пример
+/start	Начало работы	/start
+/update	Обновить данные	/update
+/stats	Статистика данных	/stats
+5. Настройка Webhook
+5.1. Регистрация вебхука
+bash
+Copy
+python manage.py set_webhook
+5.2. Схема запросов
+http
+Copy
+POST /bot/webhook/
+Content-Type: application/json
+
+{
+  "update_id": 123456,
+  "message": {
+    "message_id": 123,
+    "from": {"id": 654321},
+    "chat": {"id": 654321},
+    "text": "/update"
+  }
+}
+6. Обработка ошибок
+6.1. Типовые ошибки
+Код ошибки	Причина	Способ решения
+502	Неверный URL вебхука	Проверить WEBHOOK_URL
+504	Таймаут подключения	Увеличить timeout
+1001	Ошибка парсинга XLSX	Проверить формат файла
+1002	Ошибка подключения к БД	Проверить credentials
+6.2. Логирование
+Файлы логов:
+
+logs/bot_errors.log - Ошибки бота
+
+logs/data_processing.log - Ошибки обработки данных
+
+7. Мониторинг и администрирование
+7.1. Статистические метрики
+sql
+Copy
+-- Активные договоры
+SELECT COUNT(*) 
+FROM leasing_records 
+WHERE status = 'active' 
+  AND end_date > CURDATE();
+7.2. Планировщик задач
+Пример cron-задания для ежедневного обновления:
+
+bash
+Copy
+0 3 * * * /usr/bin/python3 /app/manage.py update_data
+8. Безопасность
+8.1. Меры защиты
+Валидация входящих запросов от Telegram
+
+HTTPS для всех внешних соединений
+
+Изоляция окружений (dev/stage/prod)
+
+Регулярное резервное копирование БД
+
+8.2. Рекомендации по аудиту
+Проверка прав доступа к файлам конфигурации
+
+Мониторинг подозрительной активности в логах
+
+Регулярное обновление зависимостей
+
+9. Разработка и тестирование
+9.1. Запуск в dev-режиме
+bash
+Copy
+python manage.py runserver 0.0.0.0:8000
+9.2. Тестовые данные
+python
+Copy
+LeasingRecord.objects.create(
+    contract_number='TEST-001',
+    client_name='Test Client',
+    amount=100000.00,
+    start_date='2024-01-01',
+    end_date='2025-01-01',
+    status='active'
+)
+10. Дорожная карта развития
+10.1. Планируемые улучшения
+Добавление REST API
+
+Интеграция с системами аналитики
+
+Реализация ролевой модели доступа
+
+Поддержка многоязычности
+
+10.2. Контакты разработчиков
+Поддержка системы: dev-team@example.com
+
+Данная документация охватывает основные аспекты системы. Для получения дополнительной информации обратитесь к исходному коду или свяжитесь с командой поддержки.

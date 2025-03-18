@@ -1,0 +1,12 @@
+﻿project/
+├── bot/
+│   ├── views.py
+│   ├── urls.py
+│   └── webhook_handler.py
+├── leasing_app/
+│   ├── management/
+│   │   └── commands/
+│   │       └── update_data.py
+│   ├── models.py
+│   └── ...
+└── settings.py
