@@ -5,6 +5,7 @@
     <Name>bot</Name>
     <RootNamespace>bot</RootNamespace>
     <InterpreterId>MSBuild|env|$(MSBuildProjectFullPath)</InterpreterId>
+    <TestFramework>Pytest</TestFramework>
   </PropertyGroup>
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -32,6 +33,9 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="app\forms.py" />
+    <Compile Include="app\management\command\import_data.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="app\management\command\set_webhook.py">
       <SubType>Code</SubType>
     </Compile>
