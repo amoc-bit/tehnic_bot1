@@ -48,6 +48,7 @@ class AllTechnic(models.Model):
     what = models.CharField(max_length=100, choices=TYPE_TECHNIC, verbose_name='Тип техники')
     branch = models.CharField(max_length=100, choices=TYPE_BRANCHES, verbose_name='Отрасль')
     name = models.CharField(max_length=100, verbose_name='Название')
+    vin = models.CharField(max_length=100, verbose_name='VIN')
     production_year = models.IntegerField(verbose_name='Год выпуска')  # Исправлено на IntegerField
     motor_hours = models.IntegerField(verbose_name='Моточасы')  # Исправлено на IntegerField
     location = models.CharField(max_length=100, verbose_name='Местоположение')  # Переименовано where → location

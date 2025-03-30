@@ -16,6 +16,10 @@
 # Mono auto generated files
 mono_crash.*
 
+# װאיכû JetBrains IDE
+.idea/
+
+
 # Build results
 [Dd]ebug/
 [Dd]ebugPublic/
