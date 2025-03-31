@@ -1,4 +1,4 @@
-﻿"""
+"""
 Definition of models.
 """
 
@@ -56,7 +56,10 @@ class AllTechnic(models.Model):
     quantity = models.IntegerField(verbose_name='Количество')  # Исправлена опечатка
     info = models.TextField(verbose_name='Дополнительная информация')  # TextField вместо CharField
     ready = models.BooleanField(default=False, verbose_name='Готовность')  # BooleanField для да/нет
+    company =  models.TextField(verbose_name='Продавец')  # TextField вместо CharField
     contact = models.CharField(max_length=50, verbose_name='Контакт')
+    date = models.DateField(auto_now_add=True, verbose_name='Дата')
+
 
     class Meta:
         
