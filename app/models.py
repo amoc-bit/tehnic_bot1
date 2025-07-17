@@ -6,7 +6,7 @@ from django.db import models
 
 # Create your models here.
 from django.db import models
-
+#ver 1.0.0 не загружено
 
 
 class AllTechnic(models.Model):
