@@ -46,6 +46,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="app\models.py" />
+    <Compile Include="app\asinc_bot.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="app\tests.py" />
     <Compile Include="app\views.py" />
     <Compile Include="app\__init__.py" />
